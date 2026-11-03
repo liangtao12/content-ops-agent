@@ -1,0 +1,18 @@
+services:
+  contentops:
+    build:
+      context: ..
+      dockerfile: infra/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - APPROVAL_SECRET=${APPROVAL_SECRET:-contentops-dev-only-secret}
+      - CONTENTOPS_API_KEY=${CONTENTOPS_API_KEY:-}
+      - AUTH_SESSION_HOURS=${AUTH_SESSION_HOURS:-12}
+      - REGISTRATION_CODE=${REGISTRATION_CODE:-}
+      - CHECKPOINT_FILE=/workspace/backend/data/checkpoints.sqlite
+      - WORKSPACE_DB=/workspace/backend/data/workspace.sqlite
+    volumes:
+      - ../backend/traces:/workspace/backend/traces
+      - ../backend/data:/workspace/backend/data

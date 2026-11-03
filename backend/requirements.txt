@@ -1,0 +1,14 @@
+# 核心依赖（无 Key 也能跑：Mock 模式 + pytest + eval）
+langgraph>=0.4
+langgraph-checkpoint-sqlite>=2.0
+openai>=1.40
+pydantic>=2.7
+fastapi>=0.110
+uvicorn>=0.29
+python-dotenv>=1.0
+filelock>=3.13
+mcp[cli]>=1.0,<2
+
+# 测试
+pytest>=8.0
+httpx>=0.27

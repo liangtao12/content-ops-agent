@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>ContentOps Agent 内容运营工作台</title>
+  <link rel="stylesheet" href="/styles.css?v=20261103d">
+</head>
+<body>
+  <section class="auth-screen" id="authScreen">
+    <div class="auth-brand-panel">
+      <div class="brand auth-brand">
+        <div class="brand-mark">CO</div>
+        <div><strong>ContentOps</strong><span>内容运营中枢</span></div>
+      </div>
+      <div class="auth-message">
+        <span class="section-kicker">ENTERPRISE CONTENT OPERATIONS</span>
+        <h1>让内容生产有依据<br>让每一次发布可追溯</h1>
+        <p>选题研究、品牌约束、双层合规、人工审批和发布排期在同一条可审计工作流中完成。</p>
+        <div class="auth-capabilities">
+          <span>LangGraph 状态编排</span>
+          <span>Human-in-the-loop 审批</span>
+          <span>审批令牌与完整审计</span>
+        </div>
+      </div>
+      <p class="auth-copyright">ContentOps · Secure content workflow</p>
+    </div>
+    <div class="auth-form-panel">
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="active" data-auth-tab="login" type="button">登录</button>
+          <button data-auth-tab="register" type="button">注册</button>
+        </div>
+        <div class="auth-heading">
+          <span class="section-kicker" id="authKicker">WELCOME BACK</span>
+          <h2 id="authTitle">登录工作台</h2>
+          <p id="authHint">使用你的团队账号继续处理内容任务。</p>
+        </div>
+        <form id="loginForm" class="auth-form">
+          <label class="field"><span>用户名</span><input id="loginUsername" autocomplete="username" required placeholder="例如 lin.cheng"></label>
+          <label class="field"><span>密码</span><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="至少 8 位"></label>
+          <button class="primary-button auth-submit" type="submit">登录</button>
+        </form>
+        <form id="registerForm" class="auth-form hidden">
+          <label class="field"><span>显示名称</span><input id="registerDisplayName" autocomplete="name" required placeholder="例如 林澄"></label>
+          <label class="field"><span>用户名</span><input id="registerUsername" autocomplete="username" required placeholder="3-32 位字母、数字或下划线"></label>
+          <label class="field"><span>密码</span><input id="registerPassword" type="password" autocomplete="new-password" required placeholder="至少 8 位，包含字母和数字"></label>
+          <label class="field hidden" id="registrationCodeField"><span>邀请码</span><input id="registrationCode" placeholder="向管理员获取邀请码"></label>
+          <label class="field" id="registerRoleField"><span>账号角色</span><select id="registerRole"></select></label>
+          <div class="role-catalog" id="registerRoleHelp"></div>
+          <button class="primary-button auth-submit" type="submit" id="registerButton">创建账号</button>
+        </form>
+        <p class="auth-error hidden" id="authError"></p>
+        <p class="auth-footnote" id="authFootnote">首个注册账号将自动成为管理员。</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="app-shell hidden" id="appShell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">CO</div>
+        <div><strong>ContentOps</strong><span>内容运营中枢</span></div>
+      </div>
+
+      <button class="workspace-switch" type="button">
+        <span class="workspace-avatar">敏</span>
+        <span><small>当前工作区</small><strong>小敏的护肤日记</strong></span>
+        <span class="chevron">⌄</span>
+      </button>
+
+      <nav class="primary-nav" aria-label="主导航">
+        <button class="nav-item active" data-view="overview" type="button">
+          <span class="nav-icon">概</span><span>运营概览</span>
+        </button>
+        <button class="nav-item" data-view="queue" type="button">
+          <span class="nav-icon">审</span><span>审批队列</span>
+          <span class="nav-count" id="pendingNavCount">0</span>
+        </button>
+        <button class="nav-item" data-view="calendar" type="button">
+          <span class="nav-icon">期</span><span>发布日程</span>
+        </button>
+        <button class="nav-item" data-view="governance" type="button">
+          <span class="nav-icon">规</span><span>质量与治理</span>
+        </button>
+        <button class="nav-item hidden" id="memberNav" data-view="members" type="button">
+          <span class="nav-icon">员</span><span>成员管理</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-note">
+        <span class="pulse-dot"></span>
+        <div><strong id="systemMode">系统运行正常</strong><small id="systemModeDetail">正在读取服务状态</small></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">CONTENT OPERATIONS</p>
+          <h1 id="pageTitle">运营概览</h1>
+        </div>
+        <div class="top-actions">
+          <span class="today" id="todayLabel"></span>
+          <button class="icon-button" id="refreshButton" type="button" title="刷新数据">↻</button>
+          <div class="operator">
+            <span class="operator-avatar" id="operatorAvatar">CO</span>
+            <span><strong id="operatorName">未登录</strong><small id="operatorRole">—</small></span>
+            <button class="row-button" id="logoutButton" type="button">退出</button>
+          </div>
+        </div>
+      </header>
+
+      <section class="view active" id="view-overview">
+        <div class="page-intro">
+          <div>
+            <h2>今天先处理最重要的内容</h2>
+            <p>从需求进入，到合规通过、人工审批和排期发布，所有状态都留在同一条可追踪链路里。</p>
+          </div>
+          <button class="primary-button" data-action="new-job" type="button"><span>＋</span> 新建内容任务</button>
+        </div>
+
+        <div class="metric-grid">
+          <article class="metric-card attention">
+            <div class="metric-icon">待</div>
+            <div><span>等待我的审批</span><strong id="metricPending">—</strong><small>需要人工确认后才能排期</small></div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-icon blue">流</div>
+            <div><span>正在运行</span><strong id="metricActive">—</strong><small>选题、创作或合规处理中</small></div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-icon green">完</div>
+            <div><span>流程完成率</span><strong id="metricCompletion">—</strong><small id="metricCompletionDetail">暂无已结束任务</small></div>
+          </article>
+          <article class="metric-card">
+            <div class="metric-icon slate">期</div>
+            <div><span>已进入排期</span><strong id="metricScheduled">—</strong><small>审批令牌保护每次发布</small></div>
+          </article>
+        </div>
+
+        <div class="overview-grid">
+          <article class="panel approval-panel">
+            <div class="panel-header">
+              <div><span class="section-kicker">APPROVAL QUEUE</span><h3>待审批内容</h3></div>
+              <button class="text-button" data-goto="queue" type="button">查看全部</button>
+            </div>
+            <div id="overviewApprovalList" class="stack-list"></div>
+          </article>
+
+          <article class="panel quality-panel">
+            <div class="panel-header">
+              <div><span class="section-kicker">QUALITY GATE</span><h3>合规质量基线</h3></div>
+              <span class="status-pill neutral">最近评测</span>
+            </div>
+            <div class="quality-score">
+              <div class="ring"><span id="qualityF1">90.9</span><small>F1</small></div>
+              <p>规则护栏在 44 条分层样本上的最近结果。低风险表达与实际发布仍由审批流程控制。</p>
+            </div>
+            <div class="quality-stats">
+              <div><span>Precision</span><strong id="qualityPrecision">83.3%</strong></div>
+              <div><span>Recall</span><strong id="qualityRecall">100%</strong></div>
+              <div><span>流程用例</span><strong id="qualityFlow">10/10</strong></div>
+            </div>
+          </article>
+        </div>
+
+        <article class="panel">
+          <div class="panel-header">
+            <div><span class="section-kicker">RECENT ACTIVITY</span><h3>最近内容任务</h3></div>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>内容主题</th><th>账号</th><th>状态</th><th>负责人</th><th>更新时间</th><th></th></tr></thead>
+              <tbody id="overviewRecentJobs"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+
+      <section class="view" id="view-queue">
+        <div class="page-intro compact">
+          <div><h2>内容与审批队列</h2><p>按状态处理任务。审批页同时展示选题依据、正文和合规风险，不暴露内部 JSON。</p></div>
+          <button class="primary-button" data-action="new-job" type="button"><span>＋</span> 新建内容任务</button>
+        </div>
+        <div class="toolbar">
+          <div class="filter-tabs" id="queueFilters">
+            <button class="active" data-status="" type="button">全部</button>
+            <button data-status="awaiting_human" type="button">待审批</button>
+            <button data-status="completed" type="button">已完成</button>
+            <button data-status="rejected" type="button">已拒绝</button>
+            <button data-status="blocked" type="button">异常</button>
+          </div>
+          <label class="search-box"><span>⌕</span><input id="jobSearch" type="search" placeholder="搜索标题或运营目标"></label>
+        </div>
+        <article class="panel table-panel">
+          <div class="table-wrap">
+            <table class="data-table large">
+              <thead><tr><th>内容主题</th><th>账号 / 平台</th><th>当前状态</th><th>风险</th><th>负责人</th><th>更新时间</th><th></th></tr></thead>
+              <tbody id="queueTableBody"></tbody>
+            </table>
+          </div>
+          <div class="empty-state hidden" id="queueEmpty">
+            <span class="empty-mark">□</span><h3>还没有匹配的内容任务</h3><p>创建第一条运营需求，系统会完成选题、创作与合规初审。</p>
+          </div>
+        </article>
+      </section>
+
+      <section class="view" id="view-calendar">
+        <div class="page-intro compact">
+          <div><h2>发布日程</h2><p>只展示通过审批并持有有效审批令牌的内容，排期写入具备幂等保护。</p></div>
+        </div>
+        <div class="calendar-summary">
+          <div><span>即将发布</span><strong id="calendarUpcoming">—</strong></div>
+          <div><span>已排期总数</span><strong id="calendarTotal">—</strong></div>
+          <div><span>覆盖平台</span><strong id="calendarPlatforms">—</strong></div>
+        </div>
+        <div class="schedule-list" id="scheduleList"></div>
+      </section>
+
+      <section class="view" id="view-governance">
+        <div class="page-intro compact">
+          <div><h2>质量与治理</h2><p>把模型能力、确定性规则和人工责任边界分别展示，便于运营审计与面试讲解。</p></div>
+        </div>
+        <div class="governance-grid">
+          <article class="panel">
+            <span class="section-kicker">AGENT BOUNDARY</span><h3>哪些环节使用 Agent</h3>
+            <div class="boundary-list">
+              <div><span class="boundary-index">01</span><p><strong>选题研究</strong>根据热榜、历史案例和账号目标选择检索工具并综合候选。</p></div>
+              <div><span class="boundary-index">02</span><p><strong>内容生成与重写</strong>依据平台规范和上一轮合规意见调整内容。</p></div>
+              <div><span class="boundary-index">03</span><p><strong>语义合规</strong>识别未踩违禁词但存在疗效暗示、虚假承诺等表达。</p></div>
+            </div>
+          </article>
+          <article class="panel">
+            <span class="section-kicker">DETERMINISTIC CONTROL</span><h3>哪些环节必须由程序控制</h3>
+            <div class="boundary-list safeguards">
+              <div><span class="boundary-index">A</span><p><strong>审批与恢复</strong>SQLite checkpoint 保存中断状态，服务重启后仍可继续审批。</p></div>
+              <div><span class="boundary-index">B</span><p><strong>编辑后复审</strong>人工修改标题、正文或标签后必须重新检查。</p></div>
+              <div><span class="boundary-index">C</span><p><strong>排期与审计</strong>审批令牌绑定内容，排期幂等，写操作保留审计事件。</p></div>
+            </div>
+          </article>
+        </div>
+        <article class="panel evaluation-panel">
+          <div class="panel-header">
+            <div><span class="section-kicker">REGRESSION EVIDENCE</span><h3>评测与工程护栏</h3></div>
+            <span class="status-pill success">65 tests passing</span>
+          </div>
+          <div class="evaluation-grid">
+            <div><span>流程完成</span><strong>10 / 10</strong><small>正常、打回、编辑、拒绝和兜底路径</small></div>
+            <div><span>规则 Precision</span><strong>83.3%</strong><small>44 条分层合规样本</small></div>
+            <div><span>规则 Recall</span><strong>100%</strong><small>已标注违规全部命中</small></div>
+            <div><span>恢复与幂等</span><strong>已覆盖</strong><small>重启、并发、重复排期和 API 校验</small></div>
+          </div>
+        </article>
+        <article class="panel role-panel">
+          <div class="panel-header">
+            <div><span class="section-kicker">ROLE MODEL</span><h3>角色与职责</h3></div>
+            <span class="status-pill neutral">最小权限原则</span>
+          </div>
+          <div class="table-wrap">
+            <table class="data-table role-table">
+              <thead><tr><th>角色</th><th>查看内容</th><th>创建任务</th><th>审批与编辑</th><th>系统治理</th></tr></thead>
+              <tbody>
+                <tr><td class="primary-cell">内容运营 Operator</td><td>✓</td><td>✓</td><td>—</td><td>—</td></tr>
+                <tr><td class="primary-cell">内容审核员 Reviewer</td><td>✓</td><td>—</td><td>✓</td><td>—</td></tr>
+                <tr><td class="primary-cell">管理员 Admin</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td></tr>
+                <tr><td class="primary-cell">只读观察者 Viewer</td><td>✓</td><td>—</td><td>—</td><td>—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="role-note">账号角色由管理员在成员管理中分配，创建与审批职责保持分离。</p>
+        </article>
+      </section>
+
+      <section class="view" id="view-members">
+        <div class="page-intro compact">
+          <div><h2>成员与权限管理</h2><p>管理员可以创建成员、调整角色、启用或停用账号，并重置登录密码。</p></div>
+          <button class="primary-button" id="newMemberButton" type="button">＋ 新增成员</button>
+        </div>
+        <div class="calendar-summary member-summary">
+          <div><span>成员总数</span><strong id="memberTotal">—</strong></div>
+          <div><span>启用账号</span><strong id="memberActive">—</strong></div>
+          <div><span>管理员</span><strong id="memberAdmins">—</strong></div>
+        </div>
+        <article class="panel table-panel">
+          <div class="table-wrap">
+            <table class="data-table large">
+              <thead><tr><th>成员</th><th>用户名</th><th>角色</th><th>状态</th><th>最近登录</th><th>操作</th></tr></thead>
+              <tbody id="memberTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="newJobModal" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modal-header">
+        <div><span class="section-kicker">NEW BRIEF</span><h2>创建内容任务</h2></div>
+        <button class="icon-button" data-close="newJobModal" type="button">×</button>
+      </div>
+      <form id="newJobForm">
+        <div class="form-grid">
+          <label class="field span-2"><span>本周运营目标</span><textarea id="jobObjective" required>秋冬敏感肌换季护理专题，目标是提升收藏和关注</textarea></label>
+          <label class="field"><span>账号名称</span><input id="accountName" required value="小敏的护肤日记"></label>
+          <label class="field"><span>发布平台</span><select id="accountPlatform"><option>小红书</option><option>抖音</option><option>视频号</option></select></label>
+          <label class="field"><span>内容垂类</span><input id="accountCategory" required value="美妆护肤"></label>
+          <label class="field"><span>目标风格</span><input id="accountPersona" required value="成分党敏感肌博主，语气真诚不夸张"></label>
+          <label class="field"><span>品牌语气</span><input id="brandTone" value="专业、真诚、少用夸张形容词"></label>
+          <label class="field"><span>行动号召</span><input id="brandCta" value="收藏并留言分享你的护理困扰"></label>
+          <label class="field span-2"><span>禁用表达（逗号分隔）</span><input id="brandBannedClaims" value="根治,治愈,全网第一,零风险"></label>
+          <label class="field span-2"><span>必须体现的信息（逗号分隔，可选）</span><input id="brandRequiredPhrases" placeholder="例如：先做局部测试、按肤质选择"></label>
+        </div>
+        <div class="run-progress hidden" id="runProgress">
+          <div class="run-progress-head">
+            <span class="run-progress-dot"></span>
+            <strong>Agent 实时执行</strong>
+            <small id="runProgressHint">正在启动工作流…</small>
+          </div>
+          <ul class="run-progress-list" id="runProgressList"></ul>
+        </div>
+        <div class="modal-footer">
+          <span class="form-hint">提交后自动完成选题、创作与合规初审，节点进度实时推送。</span>
+          <div><button class="secondary-button" data-close="newJobModal" type="button">取消</button><button class="primary-button" id="submitJobButton" type="submit">创建任务</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="drawer-backdrop hidden" id="jobDrawer" role="dialog" aria-modal="true">
+    <aside class="drawer"><div id="drawerContent"></div></aside>
+  </div>
+
+  <div class="modal-backdrop hidden" id="newMemberModal" role="dialog" aria-modal="true">
+    <div class="modal small-modal">
+      <div class="modal-header">
+        <div><span class="section-kicker">NEW MEMBER</span><h2>新增团队成员</h2></div>
+        <button class="icon-button" data-close="newMemberModal" type="button">×</button>
+      </div>
+      <form id="newMemberForm">
+        <div class="form-grid">
+          <label class="field"><span>显示名称</span><input id="memberDisplayName" required></label>
+          <label class="field"><span>用户名</span><input id="memberUsername" required></label>
+          <label class="field"><span>初始密码</span><input id="memberPassword" type="password" required placeholder="至少 8 位，包含字母和数字"></label>
+          <label class="field"><span>角色</span><select id="memberRole"><option value="operator">内容运营</option><option value="reviewer">内容审核员</option><option value="viewer">只读观察者</option><option value="admin">管理员</option></select></label>
+        </div>
+        <div class="modal-footer"><span class="form-hint">新成员会在首次登录前使用此初始密码。</span><div><button class="secondary-button" data-close="newMemberModal" type="button">取消</button><button class="primary-button" type="submit">创建成员</button></div></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="resetPasswordModal" role="dialog" aria-modal="true">
+    <div class="modal small-modal">
+      <div class="modal-header">
+        <div><span class="section-kicker">RESET PASSWORD</span><h2>重置成员密码</h2></div>
+        <button class="icon-button" data-close="resetPasswordModal" type="button">×</button>
+      </div>
+      <form id="resetPasswordForm">
+        <div class="form-grid">
+          <label class="field span-2"><span>新密码</span><input id="resetPasswordInput" type="password" required placeholder="至少 8 位，包含字母和数字"></label>
+        </div>
+        <div class="modal-footer"><span class="form-hint">重置后该成员的所有登录会话会立即失效。</span><div><button class="secondary-button" data-close="resetPasswordModal" type="button">取消</button><button class="primary-button" type="submit">确认重置</button></div></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-stack" id="toastStack"></div>
+  <script src="/app.js?v=20261103d"></script>
+</body>
+</html>

@@ -1,0 +1,10 @@
+{"id": "E01", "desc": "正常美妆选题", "objective": "秋冬敏感肌换季护理选题，目标是涨粉和收藏", "expect": {"status": "completed", "review_pass": true, "human": "approved"}}
+{"id": "E02", "desc": "注入极限词(广告法)", "objective": "推一款精华，[注入极限词] 要求突出全网第一、根治敏感肌", "expect": {"status": "completed", "violations_caught": true}}
+{"id": "E03", "desc": "注入站外导流词", "objective": "带货转化目标，[注入极限词] 文案需要引导加微信购买", "expect": {"status": "completed", "violations_caught": true}}
+{"id": "E04", "desc": "人工拒绝路径", "objective": "职场沟通类选题，测试人工拒绝", "expect": {"status": "rejected", "human": "rejected"}}
+{"id": "E05", "desc": "人工编辑后通过", "objective": "通勤穿搭选题，测试编辑后通过", "expect": {"status": "completed", "human": "edited"}}
+{"id": "E06", "desc": "正常美食选题", "objective": "打工人低成本备餐选题，目标收藏量", "expect": {"status": "completed", "review_pass": true}}
+{"id": "E07", "desc": "极限词且两轮都不过(转人工兜底)", "objective": "强销售目标，[注入极限词] 保本稳赚零风险全都要提", "expect": {"status": "completed", "needs_attention": true}}
+{"id": "E08", "desc": "正常家居选题", "objective": "出租屋低成本改造选题，目标是互动率", "expect": {"status": "completed", "review_pass": true}}
+{"id": "E09", "desc": "医疗敏感词", "objective": "水光针测评选题，[注入极限词] 文案要写处方级注射效果根治", "expect": {"status": "completed", "violations_caught": true}}
+{"id": "E10", "desc": "正常运动选题", "objective": "30天体态改善打卡选题，目标是涨粉", "expect": {"status": "completed", "review_pass": true}}

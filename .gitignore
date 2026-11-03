@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+.env
+venv/
+.venv/
+.pytest_cache/
+.pytest-tmp/
+.pytest-tmp-*/
+.eval-tmp-*/
+backend/.cache/
+backend/traces/*.jsonl
+backend/data/schedule.json
+backend/data/checkpoints.sqlite
+backend/data/workspace.sqlite
+# SQLite 运行时文件：-shm/-wal 会随进程写入，属于本地状态，不能进仓库
+backend/data/*.sqlite-shm
+backend/data/*.sqlite-wal
+backend/data/*.sqlite-*
+backend/data/*.lock
+*.tmp
+*.log
+
+# 编辑器与系统文件
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

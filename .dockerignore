@@ -1,0 +1,15 @@
+.venv/
+.git/
+__pycache__/
+*.pyc
+.pytest_cache/
+.pytest-tmp/
+.pytest-tmp-*/
+.env
+backend/.cache/
+backend/traces/*.jsonl
+backend/data/checkpoints.sqlite
+backend/data/workspace.sqlite
+backend/data/workspace.sqlite-*
+backend/data/schedule.json
+backend/data/*.lock

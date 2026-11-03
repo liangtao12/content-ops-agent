@@ -1,0 +1,21 @@
+{
+  "_desc": "热榜数据（模拟外部数据源 API 返回）。真实场景对应微博热搜/抖音热榜/小红书话题榜接口。",
+  "小红书": [
+    {"topic": "秋冬敏感肌自救指南", "heat": 986000, "category": "美妆护肤", "keywords": ["敏感肌", "屏障修复", "秋冬护肤"], "trend": "rising"},
+    {"topic": "通勤穿搭的层次感", "heat": 754000, "category": "穿搭", "keywords": ["通勤穿搭", "叠穿", "基本款"], "trend": "stable"},
+    {"topic": "打工人一周备餐攻略", "heat": 663000, "category": "美食", "keywords": ["备餐", "减脂餐", "省钱"], "trend": "rising"},
+    {"topic": "出租屋改造低成本清单", "heat": 592000, "category": "家居", "keywords": ["出租屋", "低成本改造", "收纳"], "trend": "stable"},
+    {"topic": "30 天体态改善打卡", "heat": 488000, "category": "运动健身", "keywords": ["体态", "圆肩驼背", "居家训练"], "trend": "rising"},
+    {"topic": "新中式妆容测评", "heat": 421000, "category": "美妆护肤", "keywords": ["新中式", "妆容", "国货彩妆"], "trend": "stable"}
+  ],
+  "抖音": [
+    {"topic": "3 分钟快手早餐挑战", "heat": 1120000, "category": "美食", "keywords": ["快手早餐", "挑战", "营养搭配"], "trend": "rising"},
+    {"topic": "国货彩妆横评", "heat": 892000, "category": "美妆护肤", "keywords": ["国货", "横评", "性价比"], "trend": "rising"},
+    {"topic": "小城旅行隐藏景点", "heat": 705000, "category": "旅行", "keywords": ["小城旅行", "冷门景点", "攻略"], "trend": "stable"},
+    {"topic": "新手健身避坑", "heat": 534000, "category": "运动健身", "keywords": ["健身新手", "避坑", "私教"], "trend": "stable"}
+  ],
+  "视频号": [
+    {"topic": "一日三餐营养搭配", "heat": 465000, "category": "美食", "keywords": ["营养", "家庭餐", "健康饮食"], "trend": "stable"},
+    {"topic": "职场新人沟通课", "heat": 398000, "category": "职场", "keywords": ["职场沟通", "汇报", "新人"], "trend": "rising"}
+  ]
+}

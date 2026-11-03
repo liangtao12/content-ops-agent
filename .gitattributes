@@ -1,0 +1,15 @@
+# 统一换行符，避免 Windows 提交后整文件 diff
+* text=auto eol=lf
+
+# 明确二进制，防止被当文本转换
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.sqlite binary
+*.xlsx binary
+*.docx binary
+*.pptx binary
