@@ -71,6 +71,10 @@ GitHub 同类项目的筛选、取舍与本轮改进记录见
 
 项目目录职责见 [docs/PROJECT_STRUCTURE.md](docs/PROJECT_STRUCTURE.md)。
 
+功能测试过程材料见 [docs/testing/](docs/testing/README.md)：15 条功能用例（认证、权限、审批、合规、令牌、
+幂等、恢复、时间校验）、3 条缺陷记录、执行统计与测试小结。两条失败用例已定位到代码位置并转为
+P0 / P1 缺陷（checkpoint 序列化兼容、排期时间校验缺失），原始执行表格在 `docs/testing/artifacts/`。
+
 企业工作台 API：
 
 | 接口 | 用途 |
